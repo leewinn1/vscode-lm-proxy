@@ -12,7 +12,7 @@ import { logger } from '@/utils/logger'
  * @returns {{ messages: vscode.LanguageModelChatMessage[], options: vscode.LanguageModelChatRequestOptions }}
  *   VSCode拡張API用のチャットメッセージ配列とオプション
  */
-export async function convertOpenAIRequestToVSCodeRequest(
+export async function convertOpenAIChatCompletionRequestToVSCodeRequest(
   openaiRequest: ChatCompletionCreateParams,
   vsCodeModel: vscode.LanguageModelChat,
 ): Promise<{
@@ -20,7 +20,7 @@ export async function convertOpenAIRequestToVSCodeRequest(
   options: vscode.LanguageModelChatRequestOptions
   inputTokens: number
 }> {
-  logger.debug('Converting OpenAI request to VSCode request')
+  logger.debug('Converting OpenAI chat completion request to VSCode request')
 
   // OpenAIのmessagesをVSCodeのLanguageModelChatMessage[]に変換
   const messages: vscode.LanguageModelChatMessage[] =

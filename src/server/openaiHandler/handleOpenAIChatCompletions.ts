@@ -5,7 +5,7 @@ import type {
   ChatCompletionCreateParams,
 } from 'openai/resources'
 import * as vscode from 'vscode'
-import { convertOpenAIRequestToVSCodeRequest } from '@/converter/openai/convertOpenAIRequestToVSCodeRequest'
+import { convertOpenAIChatCompletionRequestToVSCodeRequest } from '@/converter/openai/convertOpenAIChatCompletionRequestToVSCodeRequest'
 import { convertVSCodeResponseToOpenAIResponse } from '@/converter/openai/convertVSCodeResponseToOpenAIResponse'
 import { getVSCodeModel } from '@/server/handler'
 import { handleChatCompletionError } from '@/server/openaiHandler/handleChatCompletionError'
@@ -43,7 +43,7 @@ export async function handleOpenAIChatCompletions(
 
     // OpenAIリクエスト→VSCode LM API形式変換
     const { messages, options, inputTokens } =
-      await convertOpenAIRequestToVSCodeRequest(body, vsCodeModel)
+      await convertOpenAIChatCompletionRequestToVSCodeRequest(body, vsCodeModel)
 
     // キャンセラレーショントークン作成
     const cancellationToken = new vscode.CancellationTokenSource().token
