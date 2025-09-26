@@ -32,7 +32,8 @@ export async function convertOpenAIRequestToVSCodeRequest(
   // OpenAIのmessagesをVSCodeのLanguageModelChatMessage[]に変換
   const messages: vscode.LanguageModelChatMessage[] =
     openaiRequest.messages.map(msg => {
-      let role: vscode.LanguageModelChatMessageRole
+      let role: vscode.LanguageModelChatMessageRole =
+        vscode.LanguageModelChatMessageRole.User
       let content:
         | string
         | Array<
@@ -142,13 +143,36 @@ export async function convertOpenAIRequestToVSCodeRequest(
   // tools変換
   if ('tools' in openaiRequest && Array.isArray(openaiRequest.tools)) {
     options.tools = openaiRequest.tools.map(tool => {
-      const base = {
-        name: tool.function.name,
-        description: tool.function.description ?? '',
+      // ChatCompletionFunctionToolの場合
+      if (tool.type === 'function') {
+        return {
+          name: tool.function.name,
+          description: tool.function.description ?? '',
+          inputSchema: tool.function.parameters,
+        }
       }
-      return tool.function.parameters !== undefined
-        ? { ...base, inputSchema: tool.function.parameters }
-        : base
+
+      // ChatCompletionCustomToolの場合
+      const base = {
+        name: tool.custom.name,
+        description: tool.custom.description ?? '',
+      }
+
+      if (tool.custom.format) {
+        if (tool.custom.format.type === 'text') {
+          // no parameters for text tools
+        } else if (tool.custom.format.type === 'grammar') {
+          return {
+            ...base,
+            inputSchema: {
+              syntax: tool.custom.format.grammar.syntax,
+              definition: tool.custom.format.grammar.definition,
+            },
+          }
+        }
+      }
+
+      return base
     })
   }
 
