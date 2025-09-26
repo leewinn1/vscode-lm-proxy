@@ -1,10 +1,8 @@
 import type express from 'express'
-import {
-  handleAnthropicCountTokens,
-  handleAnthropicMessages,
-  handleAnthropicModelInfo,
-  handleAnthropicModels,
-} from '@/server/anthropicHandler'
+import { handleAnthropicCountTokens } from '@/server/anthropicHandler/handleAnthropicCountTokens'
+import { handleAnthropicMessages } from '@/server/anthropicHandler/handleAnthropicMessages'
+import { handleAnthropicModelInfo } from '@/server/anthropicHandler/handleAnthropicModelInfo'
+import { handleAnthropicModels } from '@/server/anthropicHandler/handleAnthropicModels'
 
 /**
  * Claude Code互換のMessages APIエンドポイントを設定する
